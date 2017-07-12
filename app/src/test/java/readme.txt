@@ -1,0 +1,1 @@
+Please add your own api key of TMDB at strings.xml else app will crash.
