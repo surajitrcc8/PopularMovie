@@ -1,0 +1,3 @@
+# PopularMovie
+Initial commit for stage 1 for review...
+Please add your own api key of TMDB and put it to strings.xml  api_key   else app will crash.
