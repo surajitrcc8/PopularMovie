@@ -52,8 +52,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         mDetailIndicatorProgressBar = (ProgressBar)findViewById(R.id.pb_detail_indicator);
         mMovieDetailsCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.ct_movie_details);
         mMoviePosterImageView = (ImageView) findViewById(R.id.iv_movie_poster);
