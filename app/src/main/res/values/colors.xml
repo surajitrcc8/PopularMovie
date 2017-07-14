@@ -3,4 +3,8 @@
     <color name="colorPrimary">#252525</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorViridian">#439184</color>
+    <color name="colorBlackSqueeze">#F7FCFB</color>
+    <color name="colorCapeCod">#464747</color>
+
 </resources>

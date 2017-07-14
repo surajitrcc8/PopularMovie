@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'THE_MOVIE_DB_API_TOKEN', MyTMDBApiKey
+    }
+
 }
 repositories {
     mavenCentral()
@@ -32,4 +36,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:26.0.0-alpha1'
 }

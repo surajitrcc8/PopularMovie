@@ -1,6 +1,7 @@
 package com.example.android.popularmovie;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.popularmovie.model.Movie;
+import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.utilities.GetMovieJsonUtils;
 import com.example.android.popularmovie.utilities.NetworkUtils;
 
@@ -42,13 +45,13 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
     private static String SORT_BY = "sort";
 
     private RecyclerView mMovieListRecyclerView;
-    private GridLayoutManager mGridLayoutManager;
     private PopularMovieAdapter mPopularMovieAdapter;
     private ProgressBar mMoviePosterProgressBar;
     private TextView mErrorMessageTextView;
     private ArrayList<Movie> mMovieList = null;
     private static int mSortType = 0;
-
+    private static final int VERTICAL_SPAN = 2;
+    private static final int HORIZONTAL_SPAN = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +60,13 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
         mMovieListRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
         mMoviePosterProgressBar = (ProgressBar) findViewById(R.id.pb_movie_poster);
         mErrorMessageTextView = (TextView) findViewById(R.id.tv_error_message);
-        mGridLayoutManager = new GridLayoutManager(this, NO_OF_MOVIE_PER_ROW);
         mPopularMovieAdapter = new PopularMovieAdapter(this, this);
-        mMovieListRecyclerView.setLayoutManager(mGridLayoutManager);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            mMovieListRecyclerView.setLayoutManager(new GridLayoutManager(this, VERTICAL_SPAN));
+        }
+        else{
+            mMovieListRecyclerView.setLayoutManager(new GridLayoutManager(this,HORIZONTAL_SPAN));
+        }
         mMovieListRecyclerView.setAdapter(mPopularMovieAdapter);
 
         //check if onCreate getting called due to some lifecycle change
@@ -99,10 +106,10 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
         mPopularMovieAdapter.setItems(null);
         switch (sortType) {
             case R.id.mi_popularity:
-                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_POPULARITY, getString(R.string.api_key));
+                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_POPULARITY, BuildConfig.THE_MOVIE_DB_API_TOKEN);
                 break;
             case R.id.mi_top_rated:
-                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_TOP_RATED, getString(R.string.api_key));
+                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_TOP_RATED, BuildConfig.THE_MOVIE_DB_API_TOKEN);
                 break;
 
         }
@@ -141,7 +148,7 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
     @Override
     public void onClickListener(int movieId) {
         Log.d(TAG, "Movie id is " + movieId);
-        Intent intent = new Intent(PopularMovieActivity.this, PopularMovieDetailsActivity.class);
+        Intent intent = new Intent(PopularMovieActivity.this, MovieDetailsActivity.class);
         intent.putExtra(getString(R.string.movie_id), movieId);
         startActivity(intent);
     }
@@ -212,8 +219,14 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
      * This function handle the error response of fetch movie list web service.
      */
     public void errorResponse() {
-        mMovieListRecyclerView.setVisibility(View.INVISIBLE);
-        mErrorMessageTextView.setVisibility(View.VISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mMovieListRecyclerView.setVisibility(View.INVISIBLE);
+                mErrorMessageTextView.setVisibility(View.VISIBLE);
+            }
+        });
+
 
     }
 }

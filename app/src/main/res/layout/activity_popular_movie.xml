@@ -16,13 +16,13 @@
         android:layout_height="wrap_content"
         android:text="@string/error_message"
         android:layout_gravity="center"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_size_medium"
         android:visibility="invisible"
         />
     <ProgressBar
         android:id="@+id/pb_movie_poster"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="@dimen/layout_xxxxsmall_width"
+        android:layout_height="@dimen/layout_xxxxsmall_height"
         android:layout_gravity="center"
         android:visibility="invisible"/>
 </FrameLayout>
