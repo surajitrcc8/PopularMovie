@@ -157,11 +157,16 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
     public Loader<ArrayList<Movie>> onCreateLoader(int id, final Bundle args) {
 
         return new AsyncTaskLoader<ArrayList<Movie>>(this) {
+            ArrayList<Movie> movies;
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
-                mMoviePosterProgressBar.setVisibility(View.VISIBLE);
-                forceLoad();
+                if(movies != null){
+                    deliverResult(movies);
+                }else {
+                    mMoviePosterProgressBar.setVisibility(View.VISIBLE);
+                    forceLoad();
+                }
             }
 
             @Override
@@ -187,6 +192,12 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
                     return null;
                 }
 
+            }
+
+            @Override
+            public void deliverResult(ArrayList<Movie> data) {
+                super.deliverResult(data);
+                movies = data;
             }
         };
     }

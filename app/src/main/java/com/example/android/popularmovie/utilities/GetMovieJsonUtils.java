@@ -20,6 +20,8 @@ import android.content.Context;
 
 import com.example.android.popularmovie.model.Movie;
 import com.example.android.popularmovie.model.MovieDetails;
+import com.example.android.popularmovie.model.Reviews;
+import com.example.android.popularmovie.model.Trailers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,21 +74,38 @@ public final class GetMovieJsonUtils {
      * @return MovieDetails object
      * @throws JSONException if JSON data cannot be properly parsed
      */
-    public static MovieDetails getMovieDetailsFromJson(Context context, String movieDetailsJsonStr)
+    public static MovieDetails getMovieDetailsFromJson(Context context, String movieDetailsJsonStr,String movieTrailersJsonStr,String movieReviewsJsonStr)
             throws JSONException {
 
         final String MOVIE_LIST = "results";
 
-        JSONObject movieDetailsJson = new JSONObject(movieDetailsJsonStr);
 
+        JSONObject movieDetailsJson = new JSONObject(movieDetailsJsonStr);
+        JSONArray movieTrailerJsonArray = new JSONObject(movieTrailersJsonStr).getJSONArray(MOVIE_LIST);
+        JSONArray movieReviewsJsonArray = new JSONObject(movieReviewsJsonStr).getJSONArray(MOVIE_LIST);
+
+        /* String array to hold each movie trailer details */
+        ArrayList<Trailers> movieTrailers = new ArrayList<Trailers>(movieTrailerJsonArray.length());
+        for (int i = 0; i < movieTrailerJsonArray.length(); i++) {
+            movieTrailers.add(new Trailers(movieTrailerJsonArray.getJSONObject(i).getString("key"),movieTrailerJsonArray.getJSONObject(i).getString("name")));
+        }
+
+        /* String array to hold each movie trailer details */
+        ArrayList<Reviews> movieReviews = new ArrayList<Reviews>(movieReviewsJsonArray.length());
+        for (int i = 0; i < movieReviewsJsonArray.length(); i++) {
+            movieReviews.add(new Reviews(movieReviewsJsonArray.getJSONObject(i).getString("url")));
+        }
 
         /* String array to hold each movie's poster path */
         MovieDetails movieDetails = new MovieDetails(movieDetailsJson.getString("original_title"),
                 movieDetailsJson.getString("poster_path"),
+                movieDetailsJson.getString("backdrop_path"),
                 movieDetailsJson.getString("overview"),
                 movieDetailsJson.getDouble("vote_average"),
                 movieDetailsJson.getString("release_date"),
-                movieDetailsJson.getInt("runtime"));
+                movieDetailsJson.getInt("runtime"),
+                movieTrailers,
+                movieReviews);
 
 
         return movieDetails;

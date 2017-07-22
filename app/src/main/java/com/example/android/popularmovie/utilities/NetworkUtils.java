@@ -14,9 +14,12 @@ public class NetworkUtils {
 
     public static final String TMDB_BASE_URL = "http://api.themoviedb.org/3/movie/";
     public static final String MOVIE_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+    public static final String MOVIE_POSTER_ORIGINAL_BASE_URL = "http://image.tmdb.org/t/p/original/";
     public static final String SORT_BY_POPULARITY="popularity";
     public static final String SORT_BY_TOP_RATED="top_rated";
     public static final String PARAM_API_KEY = "api_key";
+    public static final String MOVIE_TRAILER_PATH = "videos";
+    public static final String MOVIE_REVIEWS_PATH = "reviews";
 
 
     /**
@@ -72,6 +75,54 @@ public class NetworkUtils {
             e.printStackTrace();
         }
 
+        return url;
+    }
+
+    /**
+     * Builds the URL used to query GitHub to get movie trailer.
+     *
+     * @param id Selected move id
+     * @param apiKey The api key for TMDB access.
+     * @return The URL to use to query the GitHub.
+     */
+
+    public static URL buildMovieTrailerUrl(int id,String apiKey) {
+        Uri builtUri = null;
+        URL url = null;
+
+        builtUri = Uri.parse(TMDB_BASE_URL + id).buildUpon()
+                .appendPath(MOVIE_TRAILER_PATH)
+                .appendQueryParameter(PARAM_API_KEY, apiKey)
+                .build();
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    /**
+     * Builds the URL used to query GitHub to get movie reviews.
+     *
+     * @param id Selected move id
+     * @param apiKey The api key for TMDB access.
+     * @return The URL to use to query the GitHub.
+     */
+
+    public static URL buildMovieReviewsUrl(int id,String apiKey) {
+        Uri builtUri = null;
+        URL url = null;
+
+        builtUri = Uri.parse(TMDB_BASE_URL + id).buildUpon()
+                .appendPath(MOVIE_REVIEWS_PATH)
+                .appendQueryParameter(PARAM_API_KEY, apiKey)
+                .build();
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         return url;
     }
 

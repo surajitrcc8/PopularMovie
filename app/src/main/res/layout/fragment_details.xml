@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nest_scrollview"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.android.popularmovie.MovieDetailsActivity"
-    tools:showIn="@layout/activity_movie_details">
-
+    android:id="@+id/sv_details_container">
     <LinearLayout
         android:id="@+id/ll_movie_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="visible">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/layout_height_200"
@@ -79,27 +74,6 @@
             android:layout_marginStart="@dimen/mergin_10"
             android:layout_marginEnd="@dimen/mergin_10"
             tools:text="Movie details"/>
-
-        <LinearLayout
-            android:id="@+id/ll_trailer_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tl_movie"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorCapeCod"
-            android:elevation="6dp"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_movie_page"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

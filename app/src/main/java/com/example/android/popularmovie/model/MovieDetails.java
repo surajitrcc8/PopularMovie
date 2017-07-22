@@ -3,20 +3,48 @@ package com.example.android.popularmovie.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class MovieDetails implements Parcelable {
     String originalTitle;
     String moviePoster;
+    String movieOriginalPoster;
     String overview;
     double userRating;
     String releaseDate;
+    int duration;
+    ArrayList<Trailers>trailers;
+    ArrayList<Reviews>reviews;
+
 
     protected MovieDetails(Parcel in) {
         originalTitle = in.readString();
         moviePoster = in.readString();
+        movieOriginalPoster = in.readString();
         overview = in.readString();
         userRating = in.readDouble();
         releaseDate = in.readString();
         duration = in.readInt();
+        trailers = in.createTypedArrayList(Trailers.CREATOR);
+        reviews = in.createTypedArrayList(Reviews.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(originalTitle);
+        dest.writeString(moviePoster);
+        dest.writeString(movieOriginalPoster);
+        dest.writeString(overview);
+        dest.writeDouble(userRating);
+        dest.writeString(releaseDate);
+        dest.writeInt(duration);
+        dest.writeTypedList(trailers);
+        dest.writeTypedList(reviews);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<MovieDetails> CREATOR = new Creator<MovieDetails>() {
@@ -35,16 +63,20 @@ public class MovieDetails implements Parcelable {
         return duration;
     }
 
-    int duration;
 
     //Default constructor
-    public MovieDetails(String originalTitle, String moviePoster, String overview, double userRating, String releaseDate, int duration) {
+
+
+    public MovieDetails(String originalTitle, String moviePoster, String movieOriginalPoster, String overview, double userRating, String releaseDate, int duration, ArrayList<Trailers> trailers, ArrayList<Reviews> reviews) {
         this.originalTitle = originalTitle;
         this.moviePoster = moviePoster;
+        this.movieOriginalPoster = movieOriginalPoster;
         this.overview = overview;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.trailers = trailers;
+        this.reviews = reviews;
     }
 
     public String getOriginalTitle() {
@@ -67,19 +99,15 @@ public class MovieDetails implements Parcelable {
         return releaseDate;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public ArrayList<Trailers> getTrailers() {
+        return trailers;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(originalTitle);
-        parcel.writeString(moviePoster);
-        parcel.writeString(overview);
-        parcel.writeDouble(userRating);
-        parcel.writeString(releaseDate);
-        parcel.writeInt(duration);
+    public ArrayList<Reviews> getReviews() {
+        return reviews;
+    }
+
+    public String getMovieOriginalPoster() {
+        return movieOriginalPoster;
     }
 }
