@@ -93,7 +93,7 @@ public final class GetMovieJsonUtils {
         /* String array to hold each movie trailer details */
         ArrayList<Reviews> movieReviews = new ArrayList<Reviews>(movieReviewsJsonArray.length());
         for (int i = 0; i < movieReviewsJsonArray.length(); i++) {
-            movieReviews.add(new Reviews(movieReviewsJsonArray.getJSONObject(i).getString("url")));
+            movieReviews.add(new Reviews(movieReviewsJsonArray.getJSONObject(i).getString("author"),movieReviewsJsonArray.getJSONObject(i).getString("content")));
         }
 
         /* String array to hold each movie's poster path */

@@ -11,15 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.popularmovie.R;
+import com.example.android.popularmovie.data.TrailerAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
-import com.example.android.popularmovie.model.Trailers;
-
-import java.util.ArrayList;
 
 /**
  * Created by surajitbiswas on 7/20/17.
@@ -32,10 +28,13 @@ public class TrailerTabFragment extends Fragment implements TrailerAdapter.Trail
     private static final String TAG = TrailerTabFragment.class.getSimpleName();
     private TrailerAdapter mTrailerAdapter;
     private LinearLayoutManager mLinearLayoutManager;
+    private TextView mNoTrailerTextView;
+
+
     public void setMovieDetails(MovieDetails movieDetails) {
         this.movieDetails = movieDetails;
     }
-    private TextView mNoTrailerTextView;
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(MovieDetailsActivity.MOVIE_DETAILS,movieDetails);

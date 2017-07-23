@@ -14,23 +14,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.popularmovie.data.TabAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
-import com.example.android.popularmovie.model.Trailers;
 import com.example.android.popularmovie.utilities.GetMovieJsonUtils;
 import com.example.android.popularmovie.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<MovieDetails> ,View.OnClickListener{
 
@@ -221,9 +218,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     }
 
     private void createTabBar(MovieDetails movieDetails){
-        tabLayout.addTab(tabLayout.newTab().setText("Details"));
-        tabLayout.addTab(tabLayout.newTab().setText("Trailer"));
-        tabLayout.addTab(tabLayout.newTab().setText("Review"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.details_tab_title));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.trailer_tab_title));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.review_tab_title));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final TabAdapter adapter = new TabAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount(),movieDetails);

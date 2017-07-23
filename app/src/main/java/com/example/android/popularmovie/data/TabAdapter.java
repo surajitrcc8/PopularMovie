@@ -1,9 +1,12 @@
-package com.example.android.popularmovie;
+package com.example.android.popularmovie.data;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.android.popularmovie.DetailsTabFragment;
+import com.example.android.popularmovie.ReviewTabFragment;
+import com.example.android.popularmovie.TrailerTabFragment;
 import com.example.android.popularmovie.model.MovieDetails;
 
 /**

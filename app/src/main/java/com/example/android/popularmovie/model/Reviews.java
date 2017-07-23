@@ -8,24 +8,17 @@ import android.os.Parcelable;
  */
 
 public class Reviews implements Parcelable {
-    String url;
+    String author;
+    String content;
 
-    public Reviews(String url){
-        this.url = url;
+    public Reviews(String author, String content) {
+        this.author = author;
+        this.content = content;
     }
 
     protected Reviews(Parcel in) {
-        url = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        author = in.readString();
+        content = in.readString();
     }
 
     public static final Creator<Reviews> CREATOR = new Creator<Reviews>() {
@@ -40,7 +33,22 @@ public class Reviews implements Parcelable {
         }
     };
 
-    public String getUrl() {
-        return url;
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(author);
+        parcel.writeString(content);
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getContent() {
+        return content;
     }
 }
