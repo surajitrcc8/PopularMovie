@@ -9,11 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.android.popularmovie.R;
-import com.example.android.popularmovie.data.ReviewAdapter;
+import com.example.android.popularmovie.adapter.ReviewAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
 
 /**
@@ -45,25 +43,24 @@ public class ReviewTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_review,container,false);
-        mReviewListRecyclerView = (RecyclerView)view.findViewById(R.id.rv_review_list);
+        //mReviewListRecyclerView = (RecyclerView)view.findViewById(R.id.rv_review_list);
         mNoReviewTextView = (TextView)view.findViewById(R.id.tv_no_review);
         if(savedInstanceState != null && savedInstanceState.containsKey(MovieDetailsActivity.MOVIE_DETAILS)){
             Log.d(TAG,"FOUND");
             this.movieDetails = (MovieDetails)savedInstanceState.getParcelable(MovieDetailsActivity.MOVIE_DETAILS);
         }
         if(this.movieDetails != null){
-            mReviewAdapter = new ReviewAdapter(getContext());
-            mLinearLayoutManager = new LinearLayoutManager(getContext());
-            mReviewListRecyclerView.setLayoutManager(mLinearLayoutManager);
-            mReviewListRecyclerView.setAdapter(mReviewAdapter);
-
             if(this.movieDetails.getReviews() != null && this.movieDetails.getReviews().size() > 0){
-                mReviewAdapter.setmReviews(this.movieDetails.getReviews());
-                mReviewListRecyclerView.setVisibility(View.VISIBLE);
-                mNoReviewTextView.setVisibility(View.INVISIBLE);
+//                mReviewAdapter = new ReviewAdapter(getContext());
+//                mLinearLayoutManager = new LinearLayoutManager(getContext());
+//                mReviewListRecyclerView.setLayoutManager(mLinearLayoutManager);
+//                mReviewListRecyclerView.setAdapter(mReviewAdapter);
+//                mReviewAdapter.setmReviews(this.movieDetails.getReviews());
+//                mReviewListRecyclerView.setVisibility(View.INVISIBLE);
+                mNoReviewTextView.setVisibility(View.VISIBLE);
             }else{
                 Log.d(TAG,"Review size is " + this.movieDetails.getReviews().size());
-                mReviewListRecyclerView.setVisibility(View.INVISIBLE);
+                //mReviewListRecyclerView.setVisibility(View.INVISIBLE);
                 mNoReviewTextView.setVisibility(View.VISIBLE);
             }
 

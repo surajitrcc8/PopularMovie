@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.popularmovie.data.TrailerAdapter;
+import com.example.android.popularmovie.adapter.TrailerAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
 
 /**

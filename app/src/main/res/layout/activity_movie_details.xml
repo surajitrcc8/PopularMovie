@@ -84,5 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+        app:srcCompat="@drawable/ic_favorite_border_24dp"
+        android:onClick="onClickedFavourite"
+        android:visibility="invisible"/>
 </android.support.design.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package com.example.android.popularmovie.data;
+package com.example.android.popularmovie.adapter;
 
 import android.content.Context;
 import android.os.Build;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.android.popularmovie.R;
 import com.example.android.popularmovie.model.Reviews;
-import com.example.android.popularmovie.model.Trailers;
 
 import java.util.ArrayList;
 

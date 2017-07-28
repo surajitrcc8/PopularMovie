@@ -22,6 +22,7 @@ import com.example.android.popularmovie.model.Movie;
 import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.model.Reviews;
 import com.example.android.popularmovie.model.Trailers;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +65,25 @@ public final class GetMovieJsonUtils {
 
         return movieList;
     }
+    /**
+     * This method parses JSON from a sql response and returns an array of Movie object
+     * <p/>
+     *
+     * @param context Application context
+     * @param movieJsonStr JSON response from server
+     *
+     * @return Array of Movie object
+     *
+     * @throws JSONException If JSON data cannot be properly parsed
+     */
+    public static Movie getMoviesFromSql(Context context, String movieJsonStr,int id)
+            throws JSONException {
 
+        Gson gson = new Gson();
+        MovieDetails movieDetails = gson.fromJson(movieJsonStr,MovieDetails.class);
+        Movie movie = new Movie(id,movieDetails.getMoviePoster());
+        return movie;
+    }
     /**
      * This method parses JSON from a web response and returns MovieDetails object
      * describing the details of the movie.
@@ -107,6 +126,25 @@ public final class GetMovieJsonUtils {
                 movieTrailers,
                 movieReviews);
 
+
+        return movieDetails;
+    }
+    /**
+     * This method parses JSON from a sql response and returns a MovieDetails object
+     * <p/>
+     *
+     * @param context Application context
+     * @param movieJsonStr JSON response from server
+     *
+     * @return Array of Movie object
+     *
+     * @throws JSONException If JSON data cannot be properly parsed
+     */
+    public static MovieDetails getMoviesDetailsFromSql(Context context, String movieJsonStr)
+            throws JSONException {
+
+        Gson gson = new Gson();
+        MovieDetails movieDetails = gson.fromJson(movieJsonStr,MovieDetails.class);
 
         return movieDetails;
     }
