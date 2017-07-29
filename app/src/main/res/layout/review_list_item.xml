@@ -13,6 +13,7 @@
         tools:text="A review by Rangan"
         android:layout_marginTop="@dimen/mergin_10"
         style="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@android:color/white"
         />
     <TextView
         android:id="@+id/tv_content"
@@ -21,6 +22,7 @@
         android:layout_marginTop="@dimen/mergin_10"
         tools:text="Hello"
         style="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/darker_gray"
         />
 
 </LinearLayout>

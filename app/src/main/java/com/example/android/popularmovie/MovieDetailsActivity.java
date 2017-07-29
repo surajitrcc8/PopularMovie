@@ -99,7 +99,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(MOVIE_DETAILS)){
-            Log.d(TAG,"Oncreate called saved");
             MovieDetails movieDetails = (MovieDetails) savedInstanceState.getParcelable(MOVIE_DETAILS);
             if(movieDetails != null){
                 success(movieDetails);
@@ -233,9 +232,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     @Override
     public void onLoadFinished(Loader<MovieDetails> loader, MovieDetails movieDetails) {
         mDetailIndicatorProgressBar.setVisibility(View.INVISIBLE);
-        Log.d(TAG,"Finished called");
         if(movieDetails!= null){
-            Log.d(TAG,"Details found");
             success(movieDetails);
         }else{
             error();
@@ -254,15 +251,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         mDetailErrorMessageTextView.setVisibility(View.INVISIBLE);
         mMovieDetailsCollapsingToolbar.setTitle(movieDetails.getOriginalTitle());
         Picasso.with(this).load(backdropPath).into(mBackDropImageView);
-        //Check if any trailer is present
-        if(movieDetails.getTrailers().size() > 0){
-
-        }
-
-        //Check if any review is present
-        if(movieDetails.getReviews().size() > 0){
-            Toast.makeText(this, "Review url is " + movieDetails.getReviews().get(0), Toast.LENGTH_SHORT).show();
-        }
         createTabBar(movieDetails);
 
 

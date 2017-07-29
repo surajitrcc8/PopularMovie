@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/sv_details_container">
+    android:id="@+id/sv_details_container"
+    android:background="@color/colorPrimary">
     <LinearLayout
         android:id="@+id/ll_movie_details"
         android:layout_width="match_parent"
@@ -20,15 +21,13 @@
                 android:id="@+id/iv_movie_poster"
                 android:layout_width="@dimen/layout_width_120"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/mergin_30"
-                android:layout_marginEnd="@dimen/mergin_30"
+                android:layout_marginStart="@dimen/mergin_20"
+                android:layout_marginEnd="@dimen/mergin_20"
                 app:srcCompat="@drawable/poster"
                 android:scaleType="fitXY"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/mergin_20"
-                android:layout_marginEnd="@dimen/mergin_20"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tv_release_year"
@@ -36,33 +35,25 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_30"
                     android:layout_marginTop="@dimen/mergin_10"
-                    tools:text="2015"/>
+                    tools:text="2015"
+                    android:textColor="@android:color/darker_gray"/>
                 <TextView
                     android:id="@+id/tv_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_25"
                     android:textStyle="italic"
-                    tools:text="12min"/>
-                <TextView
-                    android:id="@+id/tv_rating"
+                    tools:text="12min"
+                    android:textColor="@android:color/darker_gray"/>
+                <RatingBar
+                    android:id="@+id/rb_rating"
+                    android:theme="@style/RatingBar"
+                    android:rating="8"
+                    android:stepSize="0.5"
+                    android:numStars="10"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/mergin_10"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/text_size_15"
-                    tools:text="8/10"
-                    />
-                <Button
-                    android:layout_width="@dimen/layout_width_120"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mark_as_favourite"
-                    android:textSize="@dimen/text_size_15"
-                    android:background="@color/colorViridian"
-                    android:textColor="@color/colorCapeCod"
-                    android:layout_marginTop="@dimen/mergin_10"
-                    android:padding="@dimen/pading_10"
-                    />
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
         <TextView
@@ -73,7 +64,8 @@
             android:textSize="@dimen/text_size_20"
             android:layout_marginStart="@dimen/mergin_10"
             android:layout_marginEnd="@dimen/mergin_10"
-            tools:text="Movie details"/>
+            tools:text="Movie details"
+            android:textColor="@android:color/darker_gray"/>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="@dimen/layout_height_278">
+    android:layout_width="match_parent" android:layout_height="@dimen/layout_height_278"
+    android:background="@color/colorPrimary">
     <ImageView
         android:id="@+id/iv_popular_movie"
         android:layout_width="match_parent"

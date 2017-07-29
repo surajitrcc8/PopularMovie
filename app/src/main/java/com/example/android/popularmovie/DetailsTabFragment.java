@@ -1,8 +1,8 @@
 package com.example.android.popularmovie;
 
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.android.popularmovie.model.MovieDetails;
@@ -28,7 +28,7 @@ public class DetailsTabFragment extends Fragment {
     private ImageView mMoviePosterImageView;
     private TextView mReleaseDateTextView;
     private TextView mDurationTextView;
-    private TextView mRatingTextView;
+    private RatingBar mRatingBar;
     private TextView mOverViewTextView;
     private LinearLayout mMovieDetailsLinearlayout;
     private NestedScrollView mDetailsContainerScrollView;
@@ -53,7 +53,7 @@ public class DetailsTabFragment extends Fragment {
         mMoviePosterImageView = (ImageView) view.findViewById(R.id.iv_movie_poster);
         mReleaseDateTextView = (TextView)view.findViewById(R.id.tv_release_year);
         mDurationTextView = (TextView) view.findViewById(R.id.tv_duration);
-        mRatingTextView = (TextView)view.findViewById(R.id.tv_rating);
+        mRatingBar = (RatingBar) view.findViewById(R.id.rb_rating);
         mOverViewTextView = (TextView)view.findViewById(R.id.tv_overview);
         if(savedInstanceState != null && savedInstanceState.containsKey(MovieDetailsActivity.MOVIE_DETAILS)){
             this.movieDetails = savedInstanceState.getParcelable(MovieDetailsActivity.MOVIE_DETAILS);
@@ -69,7 +69,7 @@ public class DetailsTabFragment extends Fragment {
             Picasso.with(getContext()).load(bannerPath).into(mMoviePosterImageView);
             mReleaseDateTextView.setText(movieDetails.getReleaseDate().split("-")[0]);
             mDurationTextView.setText(movieDetails.getDuration() + "min");
-            mRatingTextView.setText(String.format(getString(R.string.rating_value), movieDetails.getUserRating()));
+            mRatingBar.setRating((float) movieDetails.getUserRating());
             mOverViewTextView.setText(movieDetails.getOverview());
         }
     }

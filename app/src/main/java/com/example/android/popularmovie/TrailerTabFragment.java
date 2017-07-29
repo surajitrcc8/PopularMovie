@@ -31,9 +31,6 @@ public class TrailerTabFragment extends Fragment implements TrailerAdapter.Trail
     private TextView mNoTrailerTextView;
 
 
-    public void setMovieDetails(MovieDetails movieDetails) {
-        this.movieDetails = movieDetails;
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -86,5 +83,8 @@ public class TrailerTabFragment extends Fragment implements TrailerAdapter.Trail
             Toast.makeText(getContext(), "There is no application installed which can play this trailer", Toast.LENGTH_LONG).show();
         }
 
+    }
+    public void setMovieDetails(MovieDetails movieDetails) {
+        this.movieDetails = movieDetails;
     }
 }
