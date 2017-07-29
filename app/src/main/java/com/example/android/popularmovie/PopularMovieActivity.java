@@ -34,8 +34,7 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
 
     private static final String TAG = PopularMovieActivity.class.getSimpleName();
 
-    //No of columns we want to see in a row of gird.
-    private static final int NO_OF_MOVIE_PER_ROW = 2;
+
     //static final string key to store the movie list in bundle
     //so that we can prevent web service call when onCreate called for some reasons such as device rotate.
     private static final String MOVIE_LIST = "movielist";
@@ -53,9 +52,11 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
     private static PopularMovieAdapter mPopularMovieAdapter;
     private ProgressBar mMoviePosterProgressBar;
     private static TextView mErrorMessageTextView;
-    private ArrayList<Movie> mMovieList = null;
+    private static ArrayList<Movie> mMovieList = null;
     private static int mSortType = 0;
+    //No of columns when in vertical
     private static final int VERTICAL_SPAN = 2;
+    //No of columns when in horizontal
     private static final int HORIZONTAL_SPAN = 3;
     private boolean isOnstop = false;
 
@@ -73,16 +74,16 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
             mMovieListRecyclerView.setLayoutManager(new GridLayoutManager(this, HORIZONTAL_SPAN));
         }
         mMovieListRecyclerView.setAdapter(mPopularMovieAdapter);
-
         //check if onCreate getting called due to some lifecycle change
         if (savedInstanceState != null && savedInstanceState.containsKey(MOVIE_LIST)) {
+            int sortBy = savedInstanceState.containsKey(SORT_BY) ? savedInstanceState.getInt(SORT_BY) : -1;
             mMovieList = savedInstanceState.getParcelableArrayList(MOVIE_LIST);
             mPopularMovieAdapter.setItems(mMovieList);
-            if (mMovieList == null) {
+            if(sortBy == R.id.mi_favourite) {
+                GetMovie(sortBy);
+            }else if(mMovieList == null){
                 //There is no movie list list. May be device is offline so try to fetch it again.
-                if (savedInstanceState.containsKey(SORT_BY)) {
-                    GetMovie(savedInstanceState.getInt(SORT_BY));
-                }
+                GetMovie(sortBy);
             }
 
         } else {
@@ -100,49 +101,6 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
 
 
     }
-
-    /**
-     * This get the url based on user selection and then called the loader to load list of movies
-     *
-     * @param sortType This represent the user selected soty type (popularity/top rated)
-     */
-    public void GetMovie(int sortType) {
-        isOnstop = false;
-        mSortType = sortType;
-        URL movieRequestUrl = null;
-        mPopularMovieAdapter.setItems(null);
-        switch (sortType) {
-            case R.id.mi_popularity:
-                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_POPULARITY, BuildConfig.THE_MOVIE_DB_API_TOKEN);
-                break;
-            case R.id.mi_top_rated:
-                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_TOP_RATED, BuildConfig.THE_MOVIE_DB_API_TOKEN);
-                break;
-        }
-        try {
-            Bundle bundle = new Bundle();
-            LoaderManager loaderManager = getSupportLoaderManager();
-            Loader<ArrayList<Movie>> loader = loaderManager.getLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID);
-            if(sortType != R.id.mi_favourite) {
-                bundle.putString(MOVIE_URL, movieRequestUrl.toString());
-            }
-            //There is no loader is running currently
-            if (loader == null) {
-                loaderManager.initLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID, (sortType == R.id.mi_favourite) ? null : bundle, this);
-
-            } else {
-                //Loader was running so restart it.
-                loaderManager.restartLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID, (sortType == R.id.mi_favourite) ? null : bundle, this);
-
-            }
-
-        } catch (Exception e) {
-            Log.e(TAG, "Not able to Start the loader ");
-            e.printStackTrace();
-        }
-
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -174,7 +132,7 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
-                //Check if loader is not start the loading because app is resume from onStop; If so then stop loading.
+                //Check if loader is not start the loading because app is resume from onStop; If so then don't start loading.
                 if(!isOnstop) {
                     if (movies != null) {
                         deliverResult(movies);
@@ -265,6 +223,53 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
     public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
 
     }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isOnstop = true;
+    }
+
+    /**
+     * This get the url based on user selection and then called the loader to load list of movies
+     *
+     * @param sortType This represent the user selected soty type (popularity/top rated)
+     */
+    public void GetMovie(int sortType) {
+        isOnstop = false;
+        mSortType = sortType;
+        URL movieRequestUrl = null;
+        mPopularMovieAdapter.setItems(null);
+        switch (sortType) {
+            case R.id.mi_popularity:
+                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_POPULARITY, BuildConfig.THE_MOVIE_DB_API_TOKEN);
+                break;
+            case R.id.mi_top_rated:
+                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_TOP_RATED, BuildConfig.THE_MOVIE_DB_API_TOKEN);
+                break;
+        }
+        try {
+            Bundle bundle = new Bundle();
+            LoaderManager loaderManager = getSupportLoaderManager();
+            Loader<ArrayList<Movie>> loader = loaderManager.getLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID);
+            if(sortType != R.id.mi_favourite) {
+                bundle.putString(MOVIE_URL, movieRequestUrl.toString());
+            }
+            //There is no loader is running currently
+            if (loader == null) {
+                loaderManager.initLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID, (sortType == R.id.mi_favourite) ? null : bundle, this);
+
+            } else {
+                //Loader was running so restart it.
+                loaderManager.restartLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID, (sortType == R.id.mi_favourite) ? null : bundle, this);
+
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Not able to Start the loader ");
+            e.printStackTrace();
+        }
+
+    }
 
     /**
      * This function handle the success response of fetch movie list web service.
@@ -282,7 +287,7 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
             @Override
             public void run() {
                 if(mSortType == R.id.mi_favourite){
-                    mErrorMessageTextView.setText("There is no favourite movie");
+                    mErrorMessageTextView.setText(getString(R.string.no_favourite_movie));
                 }else {
                     mErrorMessageTextView.setText(getString(R.string.error_message));
                 }
@@ -294,11 +299,14 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
             }
         });
     }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        isOnstop = true;
-    }
+
+
+    /**
+     * This function get called from details page when movie is set to favourite
+     * or unfavourite to refresh the favourite movie grid view
+     * @param context Context
+     * @param cursor This holds the favourite movie data set.
+     */
     public static void upDateFavouriteMovieList(Context context,Cursor cursor) {
         if (mSortType == R.id.mi_favourite) {
             ArrayList<Movie> movies = null;
@@ -313,20 +321,22 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
                     } catch (JSONException e) {
                         e.printStackTrace();
                         mPopularMovieAdapter.setItems(null);
-                        mErrorMessageTextView.setText("There is no favourite movie");
+                        mErrorMessageTextView.setText(context.getString(R.string.no_favourite_movie));
                         mMovieListRecyclerView.setVisibility(View.INVISIBLE);
                         mErrorMessageTextView.setVisibility(View.VISIBLE);
+                        mMovieList = null;
                     }
                 } while (cursor.moveToNext());
                 mPopularMovieAdapter.setItems(movies);
                 mMovieListRecyclerView.setVisibility(View.VISIBLE);
                 mErrorMessageTextView.setVisibility(View.INVISIBLE);
+                mMovieList = movies;
             } else {
-
                 mPopularMovieAdapter.setItems(null);
-                mErrorMessageTextView.setText("There is no favourite movie");
+                mErrorMessageTextView.setText(context.getString(R.string.no_favourite_movie));
                 mMovieListRecyclerView.setVisibility(View.INVISIBLE);
                 mErrorMessageTextView.setVisibility(View.VISIBLE);
+                mMovieList = null;
             }
         }
     }

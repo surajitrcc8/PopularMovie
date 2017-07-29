@@ -47,7 +47,6 @@ public class TrailerTabFragment extends Fragment implements TrailerAdapter.Trail
         mTrailerListRecyclerView = (RecyclerView) view.findViewById(R.id.rv_trailer_list);
         mNoTrailerTextView = (TextView)view.findViewById(R.id.tv_no_trailer);
         if(savedInstanceState != null && savedInstanceState.containsKey(MovieDetailsActivity.MOVIE_DETAILS)){
-            Log.d(TAG,"FOUND");
             this.movieDetails = (MovieDetails)savedInstanceState.getParcelable(MovieDetailsActivity.MOVIE_DETAILS);
         }
         if(this.movieDetails != null) {
@@ -82,7 +81,7 @@ public class TrailerTabFragment extends Fragment implements TrailerAdapter.Trail
         if(intent.resolveActivity(getContext().getPackageManager())!=null){
             startActivity(intent);
         }else{
-            Toast.makeText(getContext(), "There is no application installed which can play this trailer", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.no_app_available), Toast.LENGTH_LONG).show();
         }
 
     }

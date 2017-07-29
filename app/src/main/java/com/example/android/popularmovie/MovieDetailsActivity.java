@@ -50,7 +50,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
     private MovieDetails mMovieDetails;
     private ActionBar mActionBar;
-    private NestedScrollView mScrollView;
     private ImageView mBackDropImageView;
     private TextView mDetailErrorMessageTextView;
     private CollapsingToolbarLayout mMovieDetailsCollapsingToolbar;
@@ -105,6 +104,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             }
 
         }else {
+            //Check if sort type is not favourite
             if(mSortType != R.id.mi_favourite) {
                 Bundle bundle = new Bundle();
                 URL mMovieDetailUrl = NetworkUtils.buildMovieDetailsUrl(mMovieId, BuildConfig.THE_MOVIE_DB_API_TOKEN);
@@ -120,7 +120,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 } else {
                     loaderManager.restartLoader(MOVIE_DETAILS_LOADER_ID, bundle, this);
                 }
+                //Check if this movie is already set as favourite.
+                isMovieFavourite();
             }else{
+                //Sort type is favourite so do not make web service call
+                //Rather make a query to local data base
                 LoaderManager loaderManager = getSupportLoaderManager();
                 Loader<MovieDetails> loader = loaderManager.getLoader(MOVIE_DETAILS_FROM_SQL_LOADER_ID);
                 if (loader == null) {
@@ -130,7 +134,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 }
             }
         }
-        // Loader to Check if movie is favourite or not
+
+
+
+    }
+    private void isMovieFavourite(){
+        // Loader to Check if movie is already set as favourite or not
         mMovieFavourite = new MovieFavourite();
         LoaderManager loaderManager = getSupportLoaderManager();
         if(loaderManager.getLoader(QUERY_MOVIE_FAVOURITE_LOADER_ID) == null){
@@ -138,10 +147,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         }else{
             loaderManager.restartLoader(QUERY_MOVIE_FAVOURITE_LOADER_ID,null,mMovieFavourite);
         }
-
-
     }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(MOVIE_DETAILS, mMovieDetails);
@@ -237,6 +243,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     public void onLoadFinished(Loader<MovieDetails> loader, MovieDetails movieDetails) {
         mDetailIndicatorProgressBar.setVisibility(View.INVISIBLE);
         if(movieDetails!= null){
+            if(loader.getId() == MOVIE_DETAILS_FROM_SQL_LOADER_ID){
+                setResetFavourite(true);
+            }
             success(movieDetails);
         }else{
             error();
@@ -256,9 +265,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         mMovieDetailsCollapsingToolbar.setTitle(movieDetails.getOriginalTitle());
         Picasso.with(this).load(backdropPath).into(mBackDropImageView);
         createTabBar(movieDetails);
-
-
-
     }
 
     private void createTabBar(MovieDetails movieDetails){

@@ -109,19 +109,22 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         SQLiteDatabase mDB = mMoviewDBHelper.getWritableDatabase();
-        int id = 0;
+        int deletedId = 0;
         switch (sUrimatcher.match(uri)){
             case WITH_ID:
                 String movieId = uri.getPathSegments().get(1);
                 String mSselection = MovieContract.MoviewEntry.MOVIE_ID + "=?";
                 String []mSelectionArgs = new String[]{movieId};
-                id = mDB.delete(MovieContract.MoviewEntry.TABLE_NAME,mSselection,mSelectionArgs);
+                deletedId = mDB.delete(MovieContract.MoviewEntry.TABLE_NAME,mSselection,mSelectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Invalid uri " + uri.toString());
         }
-        getContext().getContentResolver().notifyChange(uri,null);
-        return id;
+        // Notify the resolver of a change and return the number of items deleted
+        if(deletedId != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return deletedId;
     }
 
     @Override

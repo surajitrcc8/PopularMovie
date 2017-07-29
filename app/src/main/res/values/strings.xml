@@ -6,10 +6,10 @@
     <string name="error_message">There is an error please try again!</string>
     <string name="no_trailer_message">No trailers available</string>
     <string name="no_review_message">No reviews available</string>
+    <string name="no_favourite_movie">There is no favourite movie</string>
+    <string name="no_app_available">There is no application installed which can play this trailer</string>
     <string name="movie_detail">MovieDetail</string>
     <string name="movie_id" translatable="false">Id</string>
-    <string name="mark_as_favourite">MARK AS FAVOURITE</string>
-    <string name="rating_value">%.2f/10</string>
     <string name="review_by">A review by %s</string>
 
     <string name="details_tab_title">Details</string>

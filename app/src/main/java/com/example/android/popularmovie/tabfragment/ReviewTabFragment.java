@@ -44,7 +44,6 @@ public class ReviewTabFragment extends Fragment {
         mReviewListRecyclerView = (RecyclerView)view.findViewById(R.id.rv_review_list);
         mNoReviewTextView = (TextView)view.findViewById(R.id.tv_no_review);
         if(savedInstanceState != null && savedInstanceState.containsKey(MovieDetailsActivity.MOVIE_DETAILS)){
-            Log.d(TAG,"FOUND");
             this.movieDetails = (MovieDetails)savedInstanceState.getParcelable(MovieDetailsActivity.MOVIE_DETAILS);
         }
         if(this.movieDetails != null){
