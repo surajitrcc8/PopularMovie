@@ -4,10 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.android.popularmovie.DetailsTabFragment;
-import com.example.android.popularmovie.ReviewTabFragment;
-import com.example.android.popularmovie.TrailerTabFragment;
 import com.example.android.popularmovie.model.MovieDetails;
+import com.example.android.popularmovie.tabfragment.DetailsTabFragment;
+import com.example.android.popularmovie.tabfragment.ReviewTabFragment;
+import com.example.android.popularmovie.tabfragment.TrailerTabFragment;
 
 /**
  * Created by surajitbiswas on 7/20/17.

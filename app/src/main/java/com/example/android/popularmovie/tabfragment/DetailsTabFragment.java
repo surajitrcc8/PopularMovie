@@ -1,6 +1,5 @@
-package com.example.android.popularmovie;
+package com.example.android.popularmovie.tabfragment;
 
-import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovie.MovieDetailsActivity;
+import com.example.android.popularmovie.R;
 import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;

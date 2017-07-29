@@ -15,7 +15,6 @@
  */
 package com.example.android.popularmovie.utilities;
 
-import android.content.ContentValues;
 import android.content.Context;
 
 import com.example.android.popularmovie.model.Movie;
@@ -28,9 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Utility functions to handle OpenWeatherMap JSON data.

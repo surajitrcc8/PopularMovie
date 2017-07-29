@@ -1,4 +1,4 @@
-package com.example.android.popularmovie;
+package com.example.android.popularmovie.tabfragment;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.popularmovie.MovieDetailsActivity;
+import com.example.android.popularmovie.R;
 import com.example.android.popularmovie.adapter.TrailerAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
 

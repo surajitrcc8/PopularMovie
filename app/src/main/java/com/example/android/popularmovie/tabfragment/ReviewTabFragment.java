@@ -1,4 +1,4 @@
-package com.example.android.popularmovie;
+package com.example.android.popularmovie.tabfragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.popularmovie.MovieDetailsActivity;
+import com.example.android.popularmovie.R;
 import com.example.android.popularmovie.adapter.ReviewAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
 

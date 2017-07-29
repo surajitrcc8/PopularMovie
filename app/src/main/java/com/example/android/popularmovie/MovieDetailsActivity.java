@@ -15,20 +15,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.popularmovie.provider.MovieContract;
 import com.example.android.popularmovie.adapter.TabAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
+import com.example.android.popularmovie.provider.MovieContract;
 import com.example.android.popularmovie.utilities.FavourireMovieLoaderUtil;
 import com.example.android.popularmovie.utilities.GetMovieJsonUtils;
 import com.example.android.popularmovie.utilities.NetworkUtils;
@@ -37,7 +34,7 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 
-public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<MovieDetails> ,View.OnClickListener{
+public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<MovieDetails>{
 
     private int mMovieId = 0;
     private ProgressBar mDetailIndicatorProgressBar;
@@ -47,10 +44,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     private static final String MOVIE_REVIEWS_URL = "reviews";
     public static final String MOVIE_DETAILS = "moviedetails";
     public static final String MOVIE_FAVOURITE = "favourite";
-    public static final String MOVIE_ID = "id";
     private static final int MOVIE_DETAILS_LOADER_ID = 11;
     private static final int QUERY_MOVIE_FAVOURITE_LOADER_ID = 12;
-
     private static final int MOVIE_DETAILS_FROM_SQL_LOADER_ID = 15;
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
     private MovieDetails mMovieDetails;
@@ -65,7 +60,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     private FloatingActionButton mFabFloatingActionButton;
     private MovieFavourite mMovieFavourite;
     private int mSortType;
-    private LinearLayout mMovieDetailsLinearlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +95,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         if(savedInstanceState != null && savedInstanceState.containsKey(MOVIE_DETAILS)){
             MovieDetails movieDetails = (MovieDetails) savedInstanceState.getParcelable(MOVIE_DETAILS);
             if(movieDetails != null){
+                if(savedInstanceState.containsKey(MOVIE_FAVOURITE)){
+                    setResetFavourite(savedInstanceState.getBoolean(MOVIE_FAVOURITE));
+                }
                 success(movieDetails);
             }
             else{
@@ -133,15 +130,22 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 }
             }
         }
-        //Check if movie is favourite or not
+        // Loader to Check if movie is favourite or not
         mMovieFavourite = new MovieFavourite();
-        getSupportLoaderManager().initLoader(QUERY_MOVIE_FAVOURITE_LOADER_ID,null,mMovieFavourite);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        if(loaderManager.getLoader(QUERY_MOVIE_FAVOURITE_LOADER_ID) == null){
+            loaderManager.initLoader(QUERY_MOVIE_FAVOURITE_LOADER_ID,null,mMovieFavourite);
+        }else{
+            loaderManager.restartLoader(QUERY_MOVIE_FAVOURITE_LOADER_ID,null,mMovieFavourite);
+        }
+
 
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(MOVIE_DETAILS, mMovieDetails);
+        outState.putBoolean(MOVIE_FAVOURITE,isFavourite);
         super.onSaveInstanceState(outState);
 
 
@@ -286,19 +290,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     }
 
 
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(this, "Tag is " + view.getTag(), Toast.LENGTH_SHORT).show();
-    }
-
-//    public void onClickedTrailer(View view){
-//        Toast.makeText(this, "Tag is " + view.getContext().toString(), Toast.LENGTH_SHORT).show();
-//    }
     private void error(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //mMovieDetailsLinearlayout.setVisibility(View.INVISIBLE);
                 mDetailErrorMessageTextView.setVisibility(View.VISIBLE);
                 mFabFloatingActionButton.setVisibility(View.INVISIBLE);
 
