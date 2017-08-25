@@ -19,10 +19,10 @@ This app will:
 To become an Android developer, you must know how to bring mobile experiences to life. Specifically, you need to know how to build clean and compelling user interfaces (UIs), fetch data from network services, and optimize the experience for various mobile devices. I will hone these fundamental skills in this project.
 By building this app, I will demonstrate my understanding of the foundational elements of programming for Android. This app will communicate with the Internet and provide a responsive and delightful user experience.
 # What Will You Learn?
-*	You will fetch data from the Internet with theMovieDB API.
-*	You will use adapters and custom list layouts to populate list views.
-*	You will incorporate libraries to simplify the amount of code you need to write
-*	You will store the data in SQLite DB using Content Provider to support offline access
+*	Fetch data from the Internet with theMovieDB API.
+*	Use adapters and custom list layouts to populate list views.
+*	Incorporate libraries to simplify the amount of code you need to write
+*	Store the data in SQLite DB using Content Provider to support offline access
 
 # Pre-requisite
 You need to get a free TMDB API key from here. After that add this line MyTMDBApiKey="YOUR_TMDB_API_KEY" to [USER_HOME]/.gradle/gradle.properties In my case in mac it was at /Users/surajitbiswas/.gradle/gradle.properties
