@@ -1,10 +1,17 @@
 package com.example.android.popularmovie;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -18,6 +25,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovie.IdlingResource.SimpleIdlingResource;
 import com.example.android.popularmovie.adapter.PopularMovieAdapter;
 import com.example.android.popularmovie.model.Movie;
 import com.example.android.popularmovie.provider.MovieContract;
@@ -59,11 +67,15 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
     //No of columns when in horizontal
     private static final int HORIZONTAL_SPAN = 3;
     private boolean isOnstop = false;
+    private SimpleIdlingResource mIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popular_movie);
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},10);
+        }
         mMovieListRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
         mMoviePosterProgressBar = (ProgressBar) findViewById(R.id.pb_movie_poster);
         mErrorMessageTextView = (TextView) findViewById(R.id.tv_error_message);
@@ -122,7 +134,14 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
         intent.putExtra(SORT_BY,mSortType);
         startActivity(intent);
     }
+    class MyLoad extends AsyncTask<String,Integer,Integer>{
 
+        @Override
+        protected Integer doInBackground(String... strings) {
+
+            return null;
+        }
+    }
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(final int id, final Bundle args) {
 
@@ -179,11 +198,10 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
                     try {
                         URL movieRequestUrl = new URL(url);
                         String jsonMovieResponse = NetworkUtils
-                                .getResponseFromHttpUrl(movieRequestUrl);
+                                .getResponseFromHttpUrl(movieRequestUrl, mIdlingResource);
 
                         ArrayList<Movie> moviePosterData = GetMovieJsonUtils
                                 .getMoviesFromJson(PopularMovieActivity.this, jsonMovieResponse);
-
                         return moviePosterData;
 
                     } catch (Exception e) {
@@ -216,7 +234,9 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
         }else{
             errorResponse();
         }
-
+        if(mIdlingResource != null) {
+            mIdlingResource.setIdleState(true);
+        }
     }
 
     @Override
@@ -339,5 +359,23 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
                 mMovieList = null;
             }
         }
+    }
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {;
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
+    @VisibleForTesting
+    @NonNull
+    public AppCompatActivity getDetailsActivity () {
+        return new MovieDetailsActivity();
     }
 }

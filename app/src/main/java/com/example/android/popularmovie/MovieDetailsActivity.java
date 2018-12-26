@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.AsyncTaskLoader;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovie.IdlingResource.SimpleIdlingResource;
 import com.example.android.popularmovie.adapter.TabAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.provider.MovieContract;
@@ -59,6 +63,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     private FloatingActionButton mFabFloatingActionButton;
     private MovieFavourite mMovieFavourite;
     private int mSortType;
+    private SimpleIdlingResource mIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,15 +195,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                         Log.d(TAG, "Review url is " + movieReviewURL);
                         //Get Movie Details
                         String jsonMovieResponse = NetworkUtils
-                                .getResponseFromHttpUrl(new URL(movieDetailsURL));
+                                .getResponseFromHttpUrl(new URL(movieDetailsURL), mIdlingResource);
 
                         //Get Movie Trailer
                         String jsonMovieTrailerResponse = NetworkUtils
-                                .getResponseFromHttpUrl(new URL(movieTrailerURL));
+                                .getResponseFromHttpUrl(new URL(movieTrailerURL), mIdlingResource);
 
                         //Get Movie Review
                         String jsonMovieReviewResponse = NetworkUtils
-                                .getResponseFromHttpUrl(new URL(movieReviewURL));
+                                .getResponseFromHttpUrl(new URL(movieReviewURL), mIdlingResource);
 
 
                         MovieDetails movieDetails = GetMovieJsonUtils
@@ -374,5 +379,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         }else {
             mFabFloatingActionButton.setImageResource(R.drawable.ic_favorite_border_24dp);
         }
+    }
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {;
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
     }
 }

@@ -105,6 +105,7 @@ public class PopularMovieAdapter extends  RecyclerView.Adapter<PopularMovieAdapt
             String bannerPath = NetworkUtils.MOVIE_POSTER_BASE_URL + mMovieList.get(position).getBannerPath();
 
             Picasso.with(mParentContext).load(bannerPath).into(mPopularMovieImageView);
+            mPopularMovieImageView.setTag(mMovieList.get(position).getBannerPath());
 
            // mPopularMovieImageView.setImageResource(R.drawable.poster);
             Log.d(TAG, "Path for banner is " + bannerPath);

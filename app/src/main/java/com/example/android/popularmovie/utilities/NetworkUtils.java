@@ -1,6 +1,9 @@
 package com.example.android.popularmovie.utilities;
 
 import android.net.Uri;
+import android.support.test.espresso.IdlingResource;
+
+import com.example.android.popularmovie.IdlingResource.SimpleIdlingResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,7 +136,11 @@ public class NetworkUtils {
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading
      */
-    public static String getResponseFromHttpUrl(URL url) throws IOException {
+    public static String getResponseFromHttpUrl(URL url, SimpleIdlingResource mIdlingResource) throws IOException {
+
+        if(mIdlingResource != null) {
+            mIdlingResource.setIdleState(false);
+        }
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();

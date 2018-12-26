@@ -22,6 +22,7 @@ public class MovieProvider extends ContentProvider {
     private static UriMatcher sUrimatcher = getUriMatcher();
     private static final int WITHOUT_ID = 100;
     private static final int WITH_ID = 101;
+
     private static UriMatcher getUriMatcher(){
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(MovieContract.AUTHORIRY, MovieContract.PATH,WITHOUT_ID);
@@ -64,7 +65,6 @@ public class MovieProvider extends ContentProvider {
                         null,
                         null,
                         null);
-
                 if(cursor == null){
                     throw new android.database.SQLException("Not able to find favourite movie " + uri.toString());
                 }
