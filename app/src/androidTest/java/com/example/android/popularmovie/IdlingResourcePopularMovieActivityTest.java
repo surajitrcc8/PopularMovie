@@ -33,7 +33,7 @@ public class IdlingResourcePopularMovieActivityTest {
     private IdlingResource mIdlingResource;
 
     @Rule
-    ActivityTestRule<PopularMovieActivity> mActivityTestRule = new ActivityTestRule<>(PopularMovieActivity.class);
+    public ActivityTestRule<PopularMovieActivity> mActivityTestRule = new ActivityTestRule<>(PopularMovieActivity.class);
 
     @Before
     public void registerIdlingResource() {
@@ -43,8 +43,8 @@ public class IdlingResourcePopularMovieActivityTest {
     }
 
     @Test
-    public void idlingResourceTest() {
-        onData(anything()).inAdapterView(withId(R.id.rv_movie_list)).atPosition(1).perform(click());
+    public void shouldHaveCorrectTag() {
+        //onView(withRecyclerView(R.id.rv_movie_list).atPosition(1)).perform(click());
         // Check item at position 3 has "Some content"
         onView(withRecyclerView(R.id.rv_movie_list).atPosition(1))
                 .check(matches(hasDescendant(withTagValue(is((Object)"/fw02ONlDhrYjTSZV8XO6hhU3ds3.jpg")))));
