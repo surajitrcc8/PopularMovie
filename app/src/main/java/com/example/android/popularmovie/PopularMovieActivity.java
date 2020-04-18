@@ -8,16 +8,18 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
-import android.support.test.espresso.IdlingResource;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.IdlingResource;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -133,14 +135,6 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
         intent.putExtra(getString(R.string.movie_id), movieId);
         intent.putExtra(SORT_BY,mSortType);
         startActivity(intent);
-    }
-    class MyLoad extends AsyncTask<String,Integer,Integer>{
-
-        @Override
-        protected Integer doInBackground(String... strings) {
-
-            return null;
-        }
     }
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(final int id, final Bundle args) {

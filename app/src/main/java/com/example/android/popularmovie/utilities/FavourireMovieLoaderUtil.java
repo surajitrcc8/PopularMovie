@@ -6,12 +6,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 
 import com.example.android.popularmovie.PopularMovieActivity;
 import com.example.android.popularmovie.provider.MovieContract;
+
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.loader.content.Loader;
 
 /**
  * Created by surajitbiswas on 7/23/17.

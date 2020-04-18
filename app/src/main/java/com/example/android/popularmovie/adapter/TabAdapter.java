@@ -1,13 +1,15 @@
 package com.example.android.popularmovie.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+
 
 import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.tabfragment.DetailsTabFragment;
 import com.example.android.popularmovie.tabfragment.ReviewTabFragment;
 import com.example.android.popularmovie.tabfragment.TrailerTabFragment;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 /**
  * Created by surajitbiswas on 7/20/17.
@@ -18,7 +20,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     MovieDetails movieDetails;
 
-    public TabAdapter(FragmentManager fm, int tabNos,MovieDetails movieDetails) {
+    public TabAdapter(FragmentManager fm, int tabNos, MovieDetails movieDetails) {
         super(fm);
         this.mNumOfTabs = tabNos;
         this.movieDetails = movieDetails;

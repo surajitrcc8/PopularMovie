@@ -1,7 +1,6 @@
 package com.example.android.popularmovie.utilities;
 
 import android.net.Uri;
-import android.support.test.espresso.IdlingResource;
 
 import com.example.android.popularmovie.IdlingResource.SimpleIdlingResource;
 
@@ -15,9 +14,9 @@ import java.util.Scanner;
 public class NetworkUtils {
 
 
-    public static final String TMDB_BASE_URL = "http://api.themoviedb.org/3/movie/";
-    public static final String MOVIE_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
-    public static final String MOVIE_POSTER_ORIGINAL_BASE_URL = "http://image.tmdb.org/t/p/original/";
+    public static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
+    public static final String MOVIE_POSTER_BASE_URL = "https://image.tmdb.org/t/p/w185/";
+    public static final String MOVIE_POSTER_ORIGINAL_BASE_URL = "https://image.tmdb.org/t/p/original/";
     public static final String SORT_BY_POPULARITY="popularity";
     public static final String SORT_BY_TOP_RATED="top_rated";
     public static final String PARAM_API_KEY = "api_key";

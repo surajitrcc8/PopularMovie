@@ -1,24 +1,23 @@
 package com.example.android.popularmovie;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.test.espresso.IdlingResource;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.app.NavUtils;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.loader.content.Loader;
+import androidx.test.espresso.IdlingResource;
+import androidx.viewpager.widget.ViewPager;
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +32,9 @@ import com.example.android.popularmovie.provider.MovieContract;
 import com.example.android.popularmovie.utilities.FavourireMovieLoaderUtil;
 import com.example.android.popularmovie.utilities.GetMovieJsonUtils;
 import com.example.android.popularmovie.utilities.NetworkUtils;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -262,6 +264,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
     }
 
+    @SuppressLint("RestrictedApi")
     private void success(MovieDetails movieDetails){
         mMovieDetails = movieDetails;
         String backdropPath = NetworkUtils.MOVIE_POSTER_ORIGINAL_BASE_URL + movieDetails.getMovieOriginalPoster();
@@ -303,6 +306,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
     private void error(){
         runOnUiThread(new Runnable() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void run() {
                 mDetailErrorMessageTextView.setVisibility(View.VISIBLE);
@@ -386,7 +390,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
      */
     @VisibleForTesting
     @NonNull
-    public IdlingResource getIdlingResource() {;
+    public SimpleIdlingResource getIdlingResource() {;
         if (mIdlingResource == null) {
             mIdlingResource = new SimpleIdlingResource();
         }

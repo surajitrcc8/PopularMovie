@@ -5,7 +5,6 @@
 package com.example.android.popularmovie.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,8 @@ import com.example.android.popularmovie.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PopularMovieAdapter extends  RecyclerView.Adapter<PopularMovieAdapter.PopularMovieHolder> {
 
@@ -120,7 +121,6 @@ public class PopularMovieAdapter extends  RecyclerView.Adapter<PopularMovieAdapt
     public void setItems(ArrayList<Movie> posterList){
         mMovieList = posterList;
         notifyDataSetChanged();
-
     }
 
 }

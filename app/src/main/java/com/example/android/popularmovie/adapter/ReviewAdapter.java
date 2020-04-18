@@ -2,7 +2,6 @@ package com.example.android.popularmovie.adapter;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,8 @@ import com.example.android.popularmovie.R;
 import com.example.android.popularmovie.model.Reviews;
 
 import java.util.ArrayList;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by surajitbiswas on 7/22/17.

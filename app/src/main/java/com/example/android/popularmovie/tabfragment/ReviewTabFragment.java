@@ -1,10 +1,7 @@
 package com.example.android.popularmovie.tabfragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +12,11 @@ import com.example.android.popularmovie.MovieDetailsActivity;
 import com.example.android.popularmovie.R;
 import com.example.android.popularmovie.adapter.ReviewAdapter;
 import com.example.android.popularmovie.model.MovieDetails;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by surajitbiswas on 7/20/17.
