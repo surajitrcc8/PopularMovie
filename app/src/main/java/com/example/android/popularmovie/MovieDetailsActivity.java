@@ -17,6 +17,8 @@ import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
 import androidx.test.espresso.IdlingResource;
 import androidx.viewpager.widget.ViewPager;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
 
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 
 import com.example.android.popularmovie.IdlingResource.SimpleIdlingResource;
 import com.example.android.popularmovie.adapter.TabAdapter;
+import com.example.android.popularmovie.model.Movie;
 import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.provider.MovieContract;
 import com.example.android.popularmovie.utilities.FavourireMovieLoaderUtil;
@@ -127,8 +130,29 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 } else {
                     loaderManager.restartLoader(MOVIE_DETAILS_LOADER_ID, bundle, this);
                 }
+
+                mDetailIndicatorProgressBar.setVisibility(View.VISIBLE);
+                NetworkUtils.getInstance().api().getMovieDetails(mMovieId, BuildConfig.THE_MOVIE_DB_API_TOKEN)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<MovieDetails>() {
+                            @Override
+                            public void onSuccess(MovieDetails movieDetails) {
+                                mDetailIndicatorProgressBar.setVisibility(View.INVISIBLE);
+                                if(movieDetails!= null){
+                                    success(movieDetails);
+                                }else{
+                                    error();
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                mDetailIndicatorProgressBar.setVisibility(View.INVISIBLE);
+                                error();
+                            }
+                        });
                 //Check if this movie is already set as favourite.
-                isMovieFavourite();
+                //isMovieFavourite();
             }else{
                 //Sort type is favourite so do not make web service call
                 //Rather make a query to local data base
@@ -208,8 +232,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                                 .getResponseFromHttpUrl(new URL(movieReviewURL), mIdlingResource);
 
 
-                        MovieDetails movieDetails = GetMovieJsonUtils
-                                .getMovieDetailsFromJson(MovieDetailsActivity.this, jsonMovieResponse, jsonMovieTrailerResponse, jsonMovieReviewResponse);
+//                        MovieDetails movieDetails = GetMovieJsonUtils
+//                                .getMovieDetailsFromJson(MovieDetailsActivity.this, jsonMovieResponse, jsonMovieTrailerResponse, jsonMovieReviewResponse);
                         return movieDetails;
                     }else{
                         Uri uri = MovieContract.MoviewEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(mMovieId)).build();

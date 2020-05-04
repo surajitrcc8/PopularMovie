@@ -6,19 +6,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.AsyncTaskLoader;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.IdlingResource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
 
 import android.util.Log;
 import android.view.Menu;
@@ -30,16 +28,13 @@ import android.widget.TextView;
 import com.example.android.popularmovie.IdlingResource.SimpleIdlingResource;
 import com.example.android.popularmovie.adapter.PopularMovieAdapter;
 import com.example.android.popularmovie.model.Movie;
-import com.example.android.popularmovie.provider.MovieContract;
-import com.example.android.popularmovie.utilities.GetMovieJsonUtils;
+import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.utilities.NetworkUtils;
-
-import org.json.JSONException;
 
 import java.net.URL;
 import java.util.ArrayList;
 
-public class PopularMovieActivity extends AppCompatActivity implements PopularMovieAdapter.MovieBanerClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
+public class PopularMovieActivity extends AppCompatActivity implements PopularMovieAdapter.MovieBanerClickListener {
 
 
     private static final String TAG = PopularMovieActivity.class.getSimpleName();
@@ -62,7 +57,7 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
     private static PopularMovieAdapter mPopularMovieAdapter;
     private ProgressBar mMoviePosterProgressBar;
     private static TextView mErrorMessageTextView;
-    private static ArrayList<Movie> mMovieList = null;
+    private static ArrayList<MovieDetails> mMovieList = null;
     private static int mSortType = 0;
     //No of columns when in vertical
     private static final int VERTICAL_SPAN = 2;
@@ -136,107 +131,7 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
         intent.putExtra(SORT_BY,mSortType);
         startActivity(intent);
     }
-    @Override
-    public Loader<ArrayList<Movie>> onCreateLoader(final int id, final Bundle args) {
 
-        return new AsyncTaskLoader<ArrayList<Movie>>(this) {
-            ArrayList<Movie> movies;
-
-            @Override
-            protected void onStartLoading() {
-                super.onStartLoading();
-                //Check if loader is not start the loading because app is resume from onStop; If so then don't start loading.
-                if(!isOnstop) {
-                    if (movies != null) {
-                        deliverResult(movies);
-                    } else {
-                            mMoviePosterProgressBar.setVisibility(View.VISIBLE);
-                            forceLoad();
-
-                    }
-                }
-            }
-
-            @Override
-            public ArrayList<Movie> loadInBackground() {
-                if (id == FAVOURITE_LOADER_ID) {
-                    Cursor cursor = getContentResolver().query(MovieContract.MoviewEntry.CONTENT_URI,
-                            null,
-                            null,
-                            null,
-                            null);
-                    if (cursor != null && cursor.getCount() > 0) {
-                        movies = new ArrayList<Movie>(cursor.getCount());
-
-                        cursor.moveToPosition(0);
-                        do{
-                            try {
-                                movies.add(GetMovieJsonUtils.getMoviesFromSql(PopularMovieActivity.this,
-                                        cursor.getString(cursor.getColumnIndex(MovieContract.MoviewEntry.MOVIE_JSON_STRING)),
-                                        cursor.getInt(cursor.getColumnIndex(MovieContract.MoviewEntry.MOVIE_ID))));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                return  null;
-                            }
-                        }while (cursor.moveToNext());
-                        return movies;
-                    }else {
-                        return null;
-                    }
-
-                } else {
-                    String url = args.getString(MOVIE_URL);
-
-                    Log.d(TAG, "Url is " + url);
-
-                    try {
-                        URL movieRequestUrl = new URL(url);
-                        String jsonMovieResponse = NetworkUtils
-                                .getResponseFromHttpUrl(movieRequestUrl, mIdlingResource);
-
-                        ArrayList<Movie> moviePosterData = GetMovieJsonUtils
-                                .getMoviesFromJson(PopularMovieActivity.this, jsonMovieResponse);
-                        return moviePosterData;
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        errorResponse();
-                        return null;
-                    }
-                }
-
-
-            }
-
-            @Override
-            public void deliverResult(ArrayList<Movie> data) {
-                super.deliverResult(data);
-                if(data != null) {
-                    movies = data;
-                }
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> posterList) {
-        mMoviePosterProgressBar.setVisibility(View.INVISIBLE);
-        if (posterList != null) {
-            mPopularMovieAdapter.setItems(posterList);
-            mMovieList = posterList;
-            successResponse();
-        }else{
-            errorResponse();
-        }
-        if(mIdlingResource != null) {
-            mIdlingResource.setIdleState(true);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
-
-    }
     @Override
     protected void onStop() {
         super.onStop();
@@ -255,36 +150,55 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
         mPopularMovieAdapter.setItems(null);
         switch (sortType) {
             case R.id.mi_popularity:
-                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_POPULARITY, BuildConfig.THE_MOVIE_DB_API_TOKEN);
+                mMoviePosterProgressBar.setVisibility(View.VISIBLE);
+                NetworkUtils.getInstance().api().getPopularMovie(BuildConfig.THE_MOVIE_DB_API_TOKEN)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<Movie>() {
+                            @Override
+                            public void onSuccess(Movie movie) {
+                                updateUI(movie);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                mMoviePosterProgressBar.setVisibility(View.INVISIBLE);
+                                errorResponse();
+                            }
+                        });
                 break;
             case R.id.mi_top_rated:
-                movieRequestUrl = NetworkUtils.buildPopularMovieUrl(NetworkUtils.SORT_BY_TOP_RATED, BuildConfig.THE_MOVIE_DB_API_TOKEN);
+                NetworkUtils.getInstance().api().getTopRatedMovie(BuildConfig.THE_MOVIE_DB_API_TOKEN)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<Movie>() {
+                            @Override
+                            public void onSuccess(Movie movie) {
+                                updateUI(movie);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                mMoviePosterProgressBar.setVisibility(View.INVISIBLE);
+                                errorResponse();
+                            }
+                        });
                 break;
-        }
-        try {
-            Bundle bundle = new Bundle();
-            LoaderManager loaderManager = getSupportLoaderManager();
-            Loader<ArrayList<Movie>> loader = loaderManager.getLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID);
-            if(sortType != R.id.mi_favourite) {
-                bundle.putString(MOVIE_URL, movieRequestUrl.toString());
-            }
-            //There is no loader is running currently
-            if (loader == null) {
-                loaderManager.initLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID, (sortType == R.id.mi_favourite) ? null : bundle, this);
-
-            } else {
-                //Loader was running so restart it.
-                loaderManager.restartLoader((sortType == R.id.mi_favourite) ? FAVOURITE_LOADER_ID : LOADER_ID, (sortType == R.id.mi_favourite) ? null : bundle, this);
-
-            }
-
-        } catch (Exception e) {
-            Log.e(TAG, "Not able to Start the loader ");
-            e.printStackTrace();
         }
 
     }
 
+    private void updateUI(Movie movie){
+        mMoviePosterProgressBar.setVisibility(View.INVISIBLE);
+        if (movie != null) {
+            mPopularMovieAdapter.setItems(movie.getResults());
+            mMovieList = movie.getResults();
+            successResponse();
+        }else{
+            errorResponse();
+        }
+        if(mIdlingResource != null) {
+            mIdlingResource.setIdleState(true);
+        }
+    }
     /**
      * This function handle the success response of fetch movie list web service.
      */
@@ -323,12 +237,12 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
      */
     public static void upDateFavouriteMovieList(Context context,Cursor cursor) {
         if (mSortType == R.id.mi_favourite) {
-            ArrayList<Movie> movies = null;
+            ArrayList<MovieDetails> movies = null;
             if (cursor != null && cursor.getCount() > 0) {
-                movies = new ArrayList<Movie>(cursor.getCount());
+                movies = new ArrayList<MovieDetails>(cursor.getCount());
                 cursor.moveToPosition(0);
                 do {
-                    try {
+                    /*try {
                         movies.add(GetMovieJsonUtils.getMoviesFromSql(context,
                                 cursor.getString(cursor.getColumnIndex(MovieContract.MoviewEntry.MOVIE_JSON_STRING)),
                                 cursor.getInt(cursor.getColumnIndex(MovieContract.MoviewEntry.MOVIE_ID))));
@@ -339,7 +253,7 @@ public class PopularMovieActivity extends AppCompatActivity implements PopularMo
                         mMovieListRecyclerView.setVisibility(View.INVISIBLE);
                         mErrorMessageTextView.setVisibility(View.VISIBLE);
                         mMovieList = null;
-                    }
+                    }*/
                 } while (cursor.moveToNext());
                 mPopularMovieAdapter.setItems(movies);
                 mMovieListRecyclerView.setVisibility(View.VISIBLE);

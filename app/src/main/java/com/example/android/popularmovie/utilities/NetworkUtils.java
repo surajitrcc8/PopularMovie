@@ -3,6 +3,7 @@ package com.example.android.popularmovie.utilities;
 import android.net.Uri;
 
 import com.example.android.popularmovie.IdlingResource.SimpleIdlingResource;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
+
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkUtils {
 
@@ -22,8 +31,39 @@ public class NetworkUtils {
     public static final String PARAM_API_KEY = "api_key";
     public static final String MOVIE_TRAILER_PATH = "videos";
     public static final String MOVIE_REVIEWS_PATH = "reviews";
+    private static MovieClient movieClient;
+    protected static NetworkUtils instance;
 
+    public static NetworkUtils getInstance(){
+        if(instance == null) {
+            setupRetrofit();
+            instance = new NetworkUtils();
+        }
+        return instance;
+    }
 
+    private static void setupRetrofit() {
+        Retrofit retrofit = buildRetrofit();
+        movieClient = retrofit.create(MovieClient.class);
+    }
+
+    private static Retrofit buildRetrofit(){
+        OkHttpClient.Builder client = new OkHttpClient.Builder();
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        client.addInterceptor(loggingInterceptor);
+        client.addNetworkInterceptor(new StethoInterceptor());
+        return new Retrofit.Builder()
+                .baseUrl(TMDB_BASE_URL)
+                .client(client.build())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    public static MovieClient api(){
+        return movieClient;
+    }
     /**
      * Builds the URL used to query GitHub.
      *

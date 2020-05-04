@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.example.android.popularmovie.R;
 import com.example.android.popularmovie.model.Movie;
+import com.example.android.popularmovie.model.MovieDetails;
 import com.example.android.popularmovie.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +30,7 @@ public class PopularMovieAdapter extends  RecyclerView.Adapter<PopularMovieAdapt
      * Contaning the list of movie which we are going to show
      * in the screen
      */
-    private ArrayList<Movie> mMovieList;
+    private ArrayList<MovieDetails> mMovieList;
 
 
     /**
@@ -103,10 +104,10 @@ public class PopularMovieAdapter extends  RecyclerView.Adapter<PopularMovieAdapt
             itemView.setOnClickListener(this);
         }
         public void bind(int position){
-            String bannerPath = NetworkUtils.MOVIE_POSTER_BASE_URL + mMovieList.get(position).getBannerPath();
+            String bannerPath = NetworkUtils.MOVIE_POSTER_BASE_URL + mMovieList.get(position).getMoviePoster();
 
             Picasso.with(mParentContext).load(bannerPath).into(mPopularMovieImageView);
-            mPopularMovieImageView.setTag(mMovieList.get(position).getBannerPath());
+            mPopularMovieImageView.setTag(mMovieList.get(position).getMoviePoster());
 
            // mPopularMovieImageView.setImageResource(R.drawable.poster);
             Log.d(TAG, "Path for banner is " + bannerPath);
@@ -118,7 +119,7 @@ public class PopularMovieAdapter extends  RecyclerView.Adapter<PopularMovieAdapt
             movieBanerClickListener.onClickListener(mMovieList.get(position).getId());
         }
     }
-    public void setItems(ArrayList<Movie> posterList){
+    public void setItems(ArrayList<MovieDetails> posterList){
         mMovieList = posterList;
         notifyDataSetChanged();
     }

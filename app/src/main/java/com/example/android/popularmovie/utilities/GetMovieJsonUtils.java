@@ -46,7 +46,7 @@ public final class GetMovieJsonUtils {
      *
      * @throws JSONException If JSON data cannot be properly parsed
      */
-    public static ArrayList<Movie> getMoviesFromJson(Context context, String movieJsonStr)
+    /*public static ArrayList<Movie> getMoviesFromJson(Context context, String movieJsonStr)
             throws JSONException {
 
         final String MOVIE_LIST = "results";
@@ -54,14 +54,14 @@ public final class GetMovieJsonUtils {
         JSONObject movieJson = new JSONObject(movieJsonStr);
         JSONArray movieArray = movieJson.getJSONArray(MOVIE_LIST);
 
-        /* String array to hold each movie's poster path */
+        *//* String array to hold each movie's poster path *//*
         ArrayList<Movie> movieList = new ArrayList<Movie>(movieArray.length());
         for (int i = 0; i < movieArray.length(); i++) {
             movieList.add(new Movie(movieArray.getJSONObject(i).getInt("id"),movieArray.getJSONObject(i).getString("poster_path")));
         }
 
         return movieList;
-    }
+    }*/
     /**
      * This method parses JSON from a sql response and returns an array of Movie object
      * <p/>
@@ -73,14 +73,14 @@ public final class GetMovieJsonUtils {
      *
      * @throws JSONException If JSON data cannot be properly parsed
      */
-    public static Movie getMoviesFromSql(Context context, String movieJsonStr,int id)
+   /* public static Movie getMoviesFromSql(Context context, String movieJsonStr,int id)
             throws JSONException {
 
         Gson gson = new Gson();
         MovieDetails movieDetails = gson.fromJson(movieJsonStr,MovieDetails.class);
         Movie movie = new Movie(id,movieDetails.getMoviePoster());
         return movie;
-    }
+    }*/
     /**
      * This method parses JSON from a web response and returns MovieDetails object
      * describing the details of the movie.
@@ -90,7 +90,7 @@ public final class GetMovieJsonUtils {
      * @return MovieDetails object
      * @throws JSONException if JSON data cannot be properly parsed
      */
-    public static MovieDetails getMovieDetailsFromJson(Context context, String movieDetailsJsonStr,String movieTrailersJsonStr,String movieReviewsJsonStr)
+    /*public static MovieDetails getMovieDetailsFromJson(Context context, String movieDetailsJsonStr,String movieTrailersJsonStr,String movieReviewsJsonStr)
             throws JSONException {
 
         final String MOVIE_LIST = "results";
@@ -100,19 +100,19 @@ public final class GetMovieJsonUtils {
         JSONArray movieTrailerJsonArray = new JSONObject(movieTrailersJsonStr).getJSONArray(MOVIE_LIST);
         JSONArray movieReviewsJsonArray = new JSONObject(movieReviewsJsonStr).getJSONArray(MOVIE_LIST);
 
-        /* String array to hold each movie trailer details */
+        *//* String array to hold each movie trailer details *//*
         ArrayList<Trailers> movieTrailers = new ArrayList<Trailers>(movieTrailerJsonArray.length());
         for (int i = 0; i < movieTrailerJsonArray.length(); i++) {
             movieTrailers.add(new Trailers(movieTrailerJsonArray.getJSONObject(i).getString("key"),movieTrailerJsonArray.getJSONObject(i).getString("name")));
         }
 
-        /* String array to hold each movie trailer details */
+        *//* String array to hold each movie trailer details *//*
         ArrayList<Reviews> movieReviews = new ArrayList<Reviews>(movieReviewsJsonArray.length());
         for (int i = 0; i < movieReviewsJsonArray.length(); i++) {
             movieReviews.add(new Reviews(movieReviewsJsonArray.getJSONObject(i).getString("author"),movieReviewsJsonArray.getJSONObject(i).getString("content")));
         }
 
-        /* String array to hold each movie's poster path */
+        *//* String array to hold each movie's poster path *//*
         MovieDetails movieDetails = new MovieDetails(movieDetailsJson.getString("original_title"),
                 movieDetailsJson.getString("poster_path"),
                 movieDetailsJson.getString("backdrop_path"),
@@ -125,7 +125,9 @@ public final class GetMovieJsonUtils {
 
 
         return movieDetails;
-    }
+    }*/
+
+
     /**
      * This method parses JSON from a sql response and returns a MovieDetails object
      * <p/>

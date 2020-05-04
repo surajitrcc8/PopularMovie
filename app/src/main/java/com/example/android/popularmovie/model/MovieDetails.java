@@ -6,45 +6,29 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class MovieDetails implements Parcelable {
-    String originalTitle;
-    String moviePoster;
-    String movieOriginalPoster;
+    int id;
+    String original_title;
+    String poster_path;
+    String backdrop_path;
     String overview;
-    double userRating;
-    String releaseDate;
-    int duration;
+    double vote_average;
+    String release_date;
+    int runtime;
     ArrayList<Trailers>trailers;
     ArrayList<Reviews>reviews;
 
 
     protected MovieDetails(Parcel in) {
-        originalTitle = in.readString();
-        moviePoster = in.readString();
-        movieOriginalPoster = in.readString();
+        id = in.readInt();
+        original_title = in.readString();
+        poster_path = in.readString();
+        backdrop_path = in.readString();
         overview = in.readString();
-        userRating = in.readDouble();
-        releaseDate = in.readString();
-        duration = in.readInt();
+        vote_average = in.readDouble();
+        release_date = in.readString();
+        runtime = in.readInt();
         trailers = in.createTypedArrayList(Trailers.CREATOR);
         reviews = in.createTypedArrayList(Reviews.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(originalTitle);
-        dest.writeString(moviePoster);
-        dest.writeString(movieOriginalPoster);
-        dest.writeString(overview);
-        dest.writeDouble(userRating);
-        dest.writeString(releaseDate);
-        dest.writeInt(duration);
-        dest.writeTypedList(trailers);
-        dest.writeTypedList(reviews);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<MovieDetails> CREATOR = new Creator<MovieDetails>() {
@@ -59,32 +43,40 @@ public class MovieDetails implements Parcelable {
         }
     };
 
-    public int getDuration() {
-        return duration;
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(original_title);
+        dest.writeString(poster_path);
+        dest.writeString(backdrop_path);
+        dest.writeString(overview);
+        dest.writeDouble(vote_average);
+        dest.writeString(release_date);
+        dest.writeInt(runtime);
+        dest.writeTypedList(trailers);
+        dest.writeTypedList(reviews);
     }
 
 
-    //Default constructor
+    public int getDuration() {
+        return runtime;
+    }
 
-
-    public MovieDetails(String originalTitle, String moviePoster, String movieOriginalPoster, String overview, double userRating, String releaseDate, int duration, ArrayList<Trailers> trailers, ArrayList<Reviews> reviews) {
-        this.originalTitle = originalTitle;
-        this.moviePoster = moviePoster;
-        this.movieOriginalPoster = movieOriginalPoster;
-        this.overview = overview;
-        this.userRating = userRating;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.trailers = trailers;
-        this.reviews = reviews;
+    public int getId() {
+        return id;
     }
 
     public String getOriginalTitle() {
-        return originalTitle;
+        return original_title;
     }
 
     public String getMoviePoster() {
-        return moviePoster;
+        return poster_path;
     }
 
     public String getOverview() {
@@ -92,11 +84,11 @@ public class MovieDetails implements Parcelable {
     }
 
     public double getUserRating() {
-        return userRating;
+        return vote_average;
     }
 
     public String getReleaseDate() {
-        return releaseDate;
+        return release_date;
     }
 
     public ArrayList<Trailers> getTrailers() {
@@ -108,6 +100,6 @@ public class MovieDetails implements Parcelable {
     }
 
     public String getMovieOriginalPoster() {
-        return movieOriginalPoster;
+        return backdrop_path;
     }
 }
