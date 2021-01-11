@@ -115,7 +115,7 @@ public class FavourireMovieLoaderUtil implements LoaderManager.LoaderCallbacks {
                 case REMOVE_MOVIE_FAVOURITE_LOADER_ID:
                 case INSERT_MOVIE_FAVOURITE_LOADER_ID:
                     if(data instanceof Cursor){
-                        PopularMovieActivity.upDateFavouriteMovieList(mContext,(Cursor)data);
+                        PopularMovieActivity.Companion.upDateFavouriteMovieList(mContext,(Cursor)data);
                     }
                     break;
             }
